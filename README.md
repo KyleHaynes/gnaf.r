@@ -1,4 +1,4 @@
-# gnaf_r
+# gnaf.r
 
 ## What is G-NAF?
 
@@ -15,7 +15,17 @@ https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?
 ## What is this repo?
 A set of convenience functions to assist with importing of G-NAF in to R.
 
-# Dependencies required for these function
+## Dependencies required for these function
 - R
 - Download G-NAF
 - Depending on which function used, RAM.
+
+## Installation
+
+```R
+# Install `remotes` if it isn't installed
+if(!any(installed.packages()[,1] == "remotes")) install.packages("remotes")
+
+# Install gnaf.r
+remotes::install_github("KyleHaynes/gnaf.r")
+```

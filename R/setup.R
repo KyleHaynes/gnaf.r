@@ -91,21 +91,23 @@ setup <- function(dir = "C:\\temp\\gnaf\\G-NAF\\G-NAF FEBRUARY 2020\\", states =
     )
 
     # Return the path.
-    invisible(g_naf_setup)
-
+    # .pkgglobalenv <- new.env(parent=emptyenv())
+    assign("gnaf_setup_data", g_naf_setup, envir=parent.frame())
+    
+    return(invisible(NULL))
     ##
     ## environment(iris) <- asNamespace('xxx')
 
 }
 
-# gn <- setup(states = "QLD")
+# setup(states = "QLD")
 
 
 # get street_locality
-get_street_locality <- function(setup = gn){
+get_street_locality <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_psv"]$full_paths
@@ -118,10 +120,10 @@ get_street_locality <- function(setup = gn){
 }
 
 # get street_locality_point
-get_street_locality_point <- function(setup = gn){
+get_street_locality_point <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_POINT_psv"]$full_paths
@@ -134,10 +136,10 @@ get_street_locality_point <- function(setup = gn){
 }
 
 # get street_locality_alias
-get_street_locality_alias <- function(setup = gn){
+get_street_locality_alias <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_ALIAS_psv"]$full_paths
@@ -151,10 +153,10 @@ get_street_locality_alias <- function(setup = gn){
 
 
 # get primary_secondary
-get_primary_secondary <- function(setup = gn){
+get_primary_secondary <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_primary_secondary_psv"]$full_paths
@@ -167,10 +169,10 @@ get_primary_secondary <- function(setup = gn){
 }
 
 # get locality
-get_locality <- function(setup = gn){
+get_locality <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_locality_psv"]$full_paths
@@ -184,10 +186,10 @@ get_locality <- function(setup = gn){
 }
 
 # get locality_point
-get_locality_point <- function(setup = gn){
+get_locality_point <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_locality_point_psv"]$full_paths
@@ -201,10 +203,10 @@ get_locality_point <- function(setup = gn){
 }
 
 # get locality_neighbour
-get_locality_neighbour <- function(setup = gn){
+get_locality_neighbour <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_locality_neighbour_psv"]$full_paths
@@ -218,10 +220,10 @@ get_locality_neighbour <- function(setup = gn){
 }
 
 # get locality_alias
-get_locality_alias <- function(setup = gn){
+get_locality_alias <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_locality_alias_psv"]$full_paths
@@ -236,10 +238,10 @@ get_locality_alias <- function(setup = gn){
 
 
 # get address_site
-get_address_site <- function(setup = gn){
+get_address_site <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_site_psv"]$full_paths
@@ -255,10 +257,10 @@ get_address_site <- function(setup = gn){
 
 
 # get address_site_geocode
-get_address_site_geocode <- function(setup = gn){
+get_address_site_geocode <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_site_geocode_psv"]$full_paths
@@ -274,10 +276,10 @@ get_address_site_geocode <- function(setup = gn){
 
 
 # get address_feature
-get_address_feature <- function(setup = gn){
+get_address_feature <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_feature_psv"]$full_paths
@@ -292,10 +294,10 @@ get_address_feature <- function(setup = gn){
 
 
 # get address_detail
-get_address_detail <- function(setup = gn){
+get_address_detail <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_detail_psv"]$full_paths
@@ -310,10 +312,10 @@ get_address_detail <- function(setup = gn){
 
 
 # get address_default_geocode
-get_address_default_geocode <- function(setup = gn){
+get_address_default_geocode <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_default_geocode_psv"]$full_paths
@@ -328,10 +330,10 @@ get_address_default_geocode <- function(setup = gn){
 
 
 # get address_alias
-get_address_alias <- function(setup = gn){
+get_address_alias <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_address_alias_psv"]$full_paths
@@ -346,10 +348,10 @@ get_address_alias <- function(setup = gn){
 
 
 # get state
-get_state <- function(setup = gn){
+get_state <- function(setup = gnaf_setup_data){
     
     # Return the scheme from the setup object.
-    dt <- gn$schema
+    dt <- setup$schema
 
     # Subset to relevant files.
     paths <- dt[full_paths %ilike% "_state_psv"]$full_paths
@@ -368,7 +370,7 @@ get_state <- function(setup = gn){
 }
 
 
-build_gnaf <- function(setup = gn,
+build_gnaf <- function(setup = gnaf_setup_data,
                        remove_empty_vars = TRUE,
                        drop_date_variables = TRUE,
                        verbose = TRUE){
@@ -434,22 +436,22 @@ build_gnaf <- function(setup = gn,
     names(dt)[grepl("CLASS", names(dt))]
 
 
-    dt$STREET_SUFFIX <- gn$ac_md$STREET_SUFFIX$NAME[match(dt$STREET_SUFFIX_CODE, gn$ac_md$STREET_SUFFIX$CODE)]
+    dt$STREET_SUFFIX <- setup$ac_md$STREET_SUFFIX$NAME[match(dt$STREET_SUFFIX_CODE, setup$ac_md$STREET_SUFFIX$CODE)]
     set(dt, , "STREET_SUFFIX_CODE", NULL)
 
-    dt$FLAT_TYPE <- gn$ac_md$FLAT_TYPE$NAME[match(dt$FLAT_TYPE_CODE, gn$ac_md$FLAT_TYPE$CODE)]
+    dt$FLAT_TYPE <- setup$ac_md$FLAT_TYPE$NAME[match(dt$FLAT_TYPE_CODE, setup$ac_md$FLAT_TYPE$CODE)]
     set(dt, , "FLAT_TYPE_CODE", NULL)
 
-    dt$LEVEL_TYPE <- gn$ac_md$LEVEL_TYPE$NAME[match(dt$LEVEL_TYPE_CODE, gn$ac_md$LEVEL_TYPE$CODE)]
+    dt$LEVEL_TYPE <- setup$ac_md$LEVEL_TYPE$NAME[match(dt$LEVEL_TYPE_CODE, setup$ac_md$LEVEL_TYPE$CODE)]
     set(dt, , "LEVEL_TYPE_CODE", NULL)
 
     # Not interested in street_type, as the codes are the expanded format.
     setnames(dt, "STREET_TYPE_CODE", "STREET_TYPE")
 
-    dt$LOCALITY_CLASS <- gn$ac_md$LOCALITY_CLASS$NAME[match(dt$LOCALITY_CLASS_CODE, gn$ac_md$LOCALITY_CLASS$CODE)]
+    dt$LOCALITY_CLASS <- setup$ac_md$LOCALITY_CLASS$NAME[match(dt$LOCALITY_CLASS_CODE, setup$ac_md$LOCALITY_CLASS$CODE)]
     set(dt, , "LOCALITY_CLASS_CODE", NULL)
 
-    dt$STREET_CLASS <- gn$ac_md$STREET_CLASS$NAME[match(dt$STREET_CLASS_CODE, gn$ac_md$STREET_CLASS$CODE)]
+    dt$STREET_CLASS <- setup$ac_md$STREET_CLASS$NAME[match(dt$STREET_CLASS_CODE, setup$ac_md$STREET_CLASS$CODE)]
     set(dt, , "STREET_CLASS_CODE", NULL)
 
 
