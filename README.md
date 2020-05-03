@@ -2,11 +2,9 @@
 
 ## What is G-NAF?
 
-G-NAF is Australia's msot trusted authoritative (g)eocoded (n)ational (a)ddress (f)ile.
+G-NAF is Australia's most trusted authoritative (g)eocoded (n)ational (a)ddress (f)ile.
 
-From: https://psma.com.au/product/gnaf/
-
-TL;DR: *The geocoded address database for Australian businesses and governments.*
+More from: https://psma.com.au/product/gnaf/
 
 PSMA's G-NAF dataset contains all physical addresses in Australia. It's the most trusted source of geocoded addresses for Australian businesses and governments.
 
@@ -17,7 +15,7 @@ https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?
 ## What is this repo?
 A set of convenience functions to assist with importing of G-NAF in to R.
 
-# Dependicies requrired for these function
+# Dependencies required for these function
 - R
 - Download G-NAF
 - Depending on which function used, RAM.

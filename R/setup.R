@@ -1,6 +1,29 @@
-require(data.table)
+#' @name setup
+
+#' @title A mandatory function call for the rest of this package to work.
+
+#' @description The function identifies all relevant inputs and metadata for the importing of the G-NAF in to R. 
 
 
+#' @param dir A character vector identifying the root directory of where the G-NAF extract is located.
+
+#' @param states A regular expression of which Australian State jurisdictions to import.
+
+#' @param verbose A logical argument to determine if the function should be verbose or not. Default is \code{TRUE}.
+
+
+#' @return Returns ***UPDATE***
+
+
+#' @author Kyle Haynes, \email{kyle@@kylehaynes.com.au}.
+
+
+#' @examples
+#' # Update
+
+
+#' @import data.table
+#' @export
 setup <- function(dir = "C:\\temp\\gnaf\\G-NAF\\G-NAF FEBRUARY 2020\\", states = NA, verbose = TRUE){
     # Reassign dir.
     root <- dir
@@ -75,7 +98,7 @@ setup <- function(dir = "C:\\temp\\gnaf\\G-NAF\\G-NAF FEBRUARY 2020\\", states =
 
 }
 
-gn <- setup(states = "QLD   ")
+# gn <- setup(states = "QLD")
 
 
 # get street_locality
@@ -407,8 +430,6 @@ build_gnaf <- function(setup = gn,
     # `STATE_PID` will be of no use now. Remove it
     dt[, STATE_PID := NULL]
 
-browser()
-
     # ---- Authority code replacement ----
     names(dt)[grepl("CLASS", names(dt))]
 
@@ -470,11 +491,11 @@ browser()
 
 }
 
-build_gnaf()
+# build_gnaf()
 
 
-s <- get_street_locality()
-s_p <- get_street_locality_point()
+# s <- get_street_locality()
+# s_p <- get_street_locality_point()
 
 
 

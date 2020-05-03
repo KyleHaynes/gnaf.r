@@ -1,0 +1,18 @@
+Package: gnaf.r
+Title: Import G-NAF in to R.
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Kyle",
+           family = "Haynes",
+           role = c("aut", "cre"),
+           email = "kyle@kylehaynes.com.au")
+Description: A set of convenience functions for reading G-NAF in to R.
+Depends: R (>= 3.4.0)
+Imports: data.table
+License: use_mit_license()
+URL: https://github.com/KyleHaynes/gnaf.r
+BugReports: https://github.com/KyleHaynes/gnaf.r/issues
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
