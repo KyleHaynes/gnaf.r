@@ -16,11 +16,10 @@ Before use, users should read the G-NAF [End User Licence Agreement](https://dat
 G-NAF is released on a quarterly basis and is available from [here](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF).
 
 ## Dependencies required for this package
-- R
 - Downloaded copy of G-NAF. Available from [here](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF).
-- Depending on function call used, RAM. 
+- Depending on the function call used, RAM. 
     * At least 32GB recommended to build the entire country (As of Feb 2020, the largest function call will result in 15.2M x 52 variables, ~10Gb RAM)
-    * Importing a single State can be as little as a few hundred Mbs.
+    * However, importing a single jurisdiction can be as little as a few hundred Mbs.
 
 ## Installation of the package
 
@@ -29,10 +28,10 @@ Please note, the package is not on CRAN.
 Installing from GitHub:
 
 ```R
-# Install `remotes` if it isn't installed.
+# Install `remotes` if it isn't already installed.
 if(!any(installed.packages()[,1] == "remotes")) install.packages("remotes")
 
-# Install the gnaf.r package.
+# Install the `gnaf.r` package.
 remotes::install_github("KyleHaynes/gnaf.r")
 ```
 
@@ -41,9 +40,9 @@ remotes::install_github("KyleHaynes/gnaf.r")
 ### Prerequisite steps
 
 1. Download G-NAF from data.gov.au: https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF
-    * NOTE: File is 1.5GB compressed / 7.7GB uncompressed
-2. Extract the context of the compressed download to a desired location.
-3. Note down the location of extracted directory (and the sibling month/year folder). E.g. "C:/temp/G-NAF/G-NAF FEBRUARY 2020".
+    * NOTE: File size is ~1.5GB compressed / ~7.7GB uncompressed.
+2. Extract the content of the compressed download to a desired location.
+3. Note down the location of the extracted directory (and the sibling month/year folder). E.g. "C:/temp/G-NAF/G-NAF FEBRUARY 2020".
 
 ### From R
 
@@ -155,17 +154,17 @@ format(object.size(gnaf_simple), units = "Gb")
 # [1] "0.1 Gb"
 
 
-# Attempt to build the entire country (and Other Teritoies "OT")
+# Attempt to build the entire country (and Other Teritoies: "OT").
 setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "")
 
 # Import G-NAF for Tasmania and the ACT.
 gnaf <- build_gnaf()
 
-# Dimensions of input.
+# Dimensions of output.
 dim(gnaf)
 # [1] 15271641       52
 
-# Size.
+# Object size.
 format(object.size(gnaf), units = "Gb")
 # [1] "8.9 Gb"
 
