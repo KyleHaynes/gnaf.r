@@ -18,12 +18,12 @@ G-NAF is released on a quarterly basis and is available from [here](https://data
 ## Dependencies required for this package
 - Downloaded copy of G-NAF. Available from [here](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF).
 - Depending on the function call used, RAM. 
-    * At least 32GB recommended to build the entire country (As of Feb 2020, the largest function call will result in 15.2M x 52 variables, ~10Gb RAM)
+    * Recommend at least 32GB to build the entire country (as of the February 2020 extract, the largest function call will result in a object of 15.2M x 52 variables, ~10Gb RAM)
     * However, importing a single jurisdiction can be as little as a few hundred Mbs.
 
 ## Installation of the package
 
-Please note, the package is not on CRAN.
+Please note, the package is **not** on CRAN.
 
 Installing from GitHub:
 
