@@ -13,9 +13,11 @@ PSMA's G-NAF dataset contains all physical addresses in Australia. It's the most
 Before use, users should read the G-NAF [End User Licence Agreement](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/distribution/dist-dga-09f74802-08b1-4214-a6ea-3591b2753d30/details?q=)
 
 ## Where to get G-NAF?
+
 G-NAF is released on a quarterly basis and is available from [here](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF).
 
 ## Dependencies required for this package
+
 - Downloaded copy of G-NAF. Available from [here](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF).
 - Depending on the function call used, RAM. 
     * Recommend at least 32GB to build the entire country (as of the February 2020 extract, the largest function call will result in a object of 15.2M x 52 variables, ~10Gb RAM)
