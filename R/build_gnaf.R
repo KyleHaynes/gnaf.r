@@ -216,4 +216,26 @@ build_gnaf <- function(setup = gnaf_setup_data,
         set(dt, , "STREET_CLASS_CODE", NULL)
     }
 
+    # If simple, remove any final vars we don't need.
+    if(simple){
+        drop <- c("STREET_LOCALITY_PID", "LOCALITY_PID", "LEGAL_PARCEL_ID", "ADDRESS_SITE_PID", "GNAF_PROPERTY_PID", "PRIMARY_SECONDARY", "ALIAS_PRINCIPAL", "LEVEL_GEOCODED_CODE", "CONFIDENCE")
+        drop <- drop[drop %in% names(dt)]
+        set(dt, , drop, NULL)
+    }
+
+    order_vars <- c("ADDRESS_DETAIL_PID", "BUILDING_NAME", "LOT_NUMBER", "FLAT_NUMBER_PREFIX",
+                    "FLAT_TYPE",
+                    "FLAT_NUMBER", "FLAT_NUMBER_SUFFIX",
+                    "LEVEL_TYPE",
+                    "LEVEL_NUMBER_PREFIX", "LEVEL_NUMBER", 
+                    "NUMBER_FIRST_PREFIX", "NUMBER_FIRST", "NUMBER_FIRST_SUFFIX", "NUMBER_LAST", "NUMBER_LAST_SUFFIX", 
+                    "STREET_NAME", "STREET_TYPE", "STREET_SUFFIX", 
+                    "LOCALITY_NAME", "STATE_NAME", "POSTCODE",
+                    "LONGITUDE", "LATITUDE", "MB_2011_CODE", "MB_2016_CODE")
+
+    order_vars <- order_vars[order_vars %in% names(dt)]
+
+    setcolorder(dt, order_vars)
+
+    return(dt[])
 }

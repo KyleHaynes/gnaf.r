@@ -24,7 +24,7 @@
 
 #' @import data.table
 #' @export
-setup <- function(dir = "C:\\temp\\gnaf\\G-NAF\\G-NAF FEBRUARY 2020\\", states = NA, verbose = TRUE){
+setup <- function(dir, states = NA, verbose = TRUE){
     # Reassign dir.
     root <- dir
 

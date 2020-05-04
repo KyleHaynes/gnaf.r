@@ -4,11 +4,7 @@
 \alias{setup}
 \title{A mandatory function call for the rest of this package to work.}
 \usage{
-setup(
-  dir = "C:\\\\temp\\\\gnaf\\\\G-NAF\\\\G-NAF FEBRUARY 2020\\\\",
-  states = NA,
-  verbose = TRUE
-)
+setup(dir, states = NA, verbose = TRUE)
 }
 \arguments{
 \item{dir}{A character vector identifying the root directory of where the G-NAF extract is located.}
