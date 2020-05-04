@@ -22,7 +22,7 @@ G-NAF is released on a quarterly basis and is available from [here](https://data
     * At least 32GB recommended to build the entire country (As of Feb 2020, the largest function call will result in 15.2M x 52 variables, ~10Gb RAM)
     * Importing a single State can be as little as a few hundred Mbs.
 
-### Installation of the package
+## Installation of the package
 
 Please note, the package is not on CRAN.
 
@@ -36,16 +36,16 @@ if(!any(installed.packages()[,1] == "remotes")) install.packages("remotes")
 remotes::install_github("KyleHaynes/gnaf.r")
 ```
 
-### Basic usage
+## Basic usage
 
-## Prerequisite steps
+### Prerequisite steps
 
 1. Download G-NAF from data.gov.au: https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF
     * NOTE: File is 1.5GB compressed / 7.7GB uncompressed
 2. Extract the context of the compressed download to a desired location.
 3. Note down the location of extracted directory (and the sibling month/year folder). E.g. "C:/temp/G-NAF/G-NAF FEBRUARY 2020".
 
-## From R
+### From R
 
 ```R
 # Load the package.
@@ -183,6 +183,6 @@ gnaf[, .N, STATE_NAME]
     # 9:            WESTERN AUSTRALIA 1543967
 ```
 
-### Other
+## Other
 
 Issues / Bugs / Suggestions: https://github.com/KyleHaynes/gnaf.r/issues
