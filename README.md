@@ -170,6 +170,7 @@ dim(gnaf)
 format(object.size(gnaf), units = "Gb")
 # [1] "8.9 Gb"
 
+
 # Frequency table by State.
 gnaf[, .N, STATE_NAME]
     #                      STATE_NAME       N
