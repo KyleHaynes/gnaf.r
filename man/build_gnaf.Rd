@@ -12,6 +12,8 @@ build_gnaf(
   add_geo_coordinate = TRUE,
   add_meshblock_2011 = TRUE,
   add_meshblock_2016 = TRUE,
+  add_locality_alias_variants = FALSE,
+  add_alias_links = FALSE,
   verbose = TRUE
 )
 }
@@ -29,6 +31,10 @@ build_gnaf(
 \item{add_meshblock_2011}{A logical argument to Mesh Block 2011 fields. Default is \code{TRUE}.}
 
 \item{add_meshblock_2016}{A logical argument to Mesh Block 2016 fields. Default is \code{TRUE}.}
+
+\item{add_locality_alias_variants}{A logical argument to include locality alias variants. Default is \code{FALSE}.}
+
+\item{add_alias_links}{A logical argument to allow inclusion of primary id on alias addresses. Default is \code{FALSE}.}
 
 \item{verbose}{A logical argument to verbose.  Default is \code{TRUE}.}
 }

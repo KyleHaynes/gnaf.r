@@ -19,6 +19,10 @@
 
 #' @param add_meshblock_2016 A logical argument to Mesh Block 2016 fields. Default is \code{TRUE}.
 
+#' @param add_locality_alias_variants A logical argument to include locality alias variants. Default is \code{FALSE}.
+
+#' @param add_alias_links A logical argument to allow inclusion of primary id on alias addresses. Default is \code{FALSE}.
+
 #' @param verbose A logical argument to verbose.  Default is \code{TRUE}.
 
 
@@ -41,6 +45,8 @@ build_gnaf <- function(setup = gnaf_setup_data,
                        add_geo_coordinate = TRUE,
                        add_meshblock_2011 = TRUE,
                        add_meshblock_2016 = TRUE,
+                       add_locality_alias_variants = FALSE,
+                       add_alias_links = FALSE,
                        verbose = TRUE){
     
     # ---- Import address detail ----
@@ -91,7 +97,8 @@ build_gnaf <- function(setup = gnaf_setup_data,
         set(tmp, , drop, NULL)
     }
     if(simple){
-        drop <- c("STREET_CLASS_CODE", "LOCALITY_PID", "GNAF_STREET_PID", "GNAF_STREET_CONFIDENCE", "GNAF_RELIABILITY_CODE")
+        # NB "LOCALITY_PID" is required for Locality alias. It get's dropped later.
+        drop <- c("STREET_CLASS_CODE", "GNAF_STREET_PID", "GNAF_STREET_CONFIDENCE", "GNAF_RELIABILITY_CODE")
         drop <- drop[drop %in% names(tmp)]
         set(tmp, , drop, NULL)
     }
@@ -218,7 +225,55 @@ build_gnaf <- function(setup = gnaf_setup_data,
 
     # If simple, remove any final vars we don't need.
     if(simple){
-        drop <- c("STREET_LOCALITY_PID", "LOCALITY_PID", "LEGAL_PARCEL_ID", "ADDRESS_SITE_PID", "GNAF_PROPERTY_PID", "PRIMARY_SECONDARY", "ALIAS_PRINCIPAL", "LEVEL_GEOCODED_CODE", "CONFIDENCE")
+        # Again, except for "LOCALITY_PID", as we "may" need it in the following.
+        drop <- c("STREET_LOCALITY_PID", "LEGAL_PARCEL_ID", "ADDRESS_SITE_PID", "GNAF_PROPERTY_PID", "PRIMARY_SECONDARY", "ALIAS_PRINCIPAL", "LEVEL_GEOCODED_CODE", "CONFIDENCE")
+        drop <- drop[drop %in% names(dt)]
+        set(dt, , drop, NULL)
+    }
+
+    if(add_alias_links){
+        a <- get_address_alias()
+        setnames(a, c("PRINCIPAL_PID", "ALIAS_PID"), c("PRINCIPAL_LINKED_PID", "ADDRESS_DETAIL_PID"))
+        a <- a[, c("PRINCIPAL_LINKED_PID", "ADDRESS_DETAIL_PID")]
+        dt <- merge(dt, a, by = "ADDRESS_DETAIL_PID", all.x = TRUE)
+    }
+
+    # NB, This section creates a lot of extra rows. Therefore, it should sit where it can benefit `simple = T` (memory mgmt).
+    if(add_locality_alias_variants){
+        # Localities can have alias', G-NAF captures these.
+        # We can add variants, though, in saying so, depending on the jurisdiction it will make the data
+        # much longer. E.g. for QLD, it expands ~3.2M records to 13M records. 
+        
+        # Get locality alias information.
+        a <- get_locality_alias()
+
+        # Create a group id sequence.
+        a[, gid := sequence(.N), by = LOCALITY_PID]
+
+        # Cast localities into wide format by the gid.
+        a <- dcast(a, LOCALITY_PID ~ gid, value.var = c("NAME"))
+
+        # Identify the alias variables (they're just numerics) and make them more indicative.
+        vars <- paste0("LOCALITY_ALIAS_NAME_", names(a)[names(a) %like% "^\\d+$"])
+        # Update names to be more indicative
+        setnames(a, names(a)[names(a) %like% "^\\d+$"], vars)
+        # Merge onto the G-NAF data.
+        dt <- merge(dt, a, by = "LOCALITY_PID", all.x = T)
+        # Melt the wide Alias' and the Correct Locality into 1 variable.
+        dt <- melt(dt, measure = list(c("LOCALITY_NAME", vars)), value.name = c("LOCALITY_NAME"), na.rm = TRUE)
+
+        # Identify alias vs principal localities.
+        dt[, LOCALITY_ALIAS_PRINCIPAL := "A"]
+        dt[variable == "LOCALITY_NAME", LOCALITY_ALIAS_PRINCIPAL := "P"]
+        
+        # Remove the `variable` column as it serves no purpose now.
+        set(dt, , "variable", NULL)
+    }
+
+    # If simple, remove any final vars we don't need.
+    if(simple){
+        # Again, except for "LOCALITY_PID", as we "may" need it in the following.
+        drop <- c("LOCALITY_PID")
         drop <- drop[drop %in% names(dt)]
         set(dt, , drop, NULL)
     }
@@ -234,7 +289,6 @@ build_gnaf <- function(setup = gnaf_setup_data,
                     "LONGITUDE", "LATITUDE", "MB_2011_CODE", "MB_2016_CODE")
 
     order_vars <- order_vars[order_vars %in% names(dt)]
-
     setcolorder(dt, order_vars)
 
     return(dt[])
