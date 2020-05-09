@@ -29,7 +29,7 @@ get_street_locality <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    street_locality <- rbindlist(lapply(paths, fread))
+    street_locality <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(street_locality)
@@ -67,7 +67,7 @@ get_street_locality_point <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_POINT_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    street_locality_point <- rbindlist(lapply(paths, fread))
+    street_locality_point <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(street_locality_point)
@@ -106,7 +106,7 @@ get_street_locality_alias <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_STREET_LOCALITY_ALIAS_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    street_locality_alias <- rbindlist(lapply(paths, fread))
+    street_locality_alias <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(street_locality_alias)
@@ -145,7 +145,7 @@ get_primary_secondary <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_primary_secondary_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    primary_secondary <- rbindlist(lapply(paths, fread))
+    primary_secondary <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(primary_secondary)
@@ -183,7 +183,7 @@ get_locality <- function(setup = gnaf_setup_data){
     paths <- paths[!paths %ilike% "_STREET_"]
 
     # fread and bind together as a single data.table.
-    locality <- rbindlist(lapply(paths, fread))
+    locality <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(locality)
@@ -221,7 +221,7 @@ get_locality_point <- function(setup = gnaf_setup_data){
     paths <- paths[!paths %ilike% "_STREET_"]
 
     # fread and bind together as a single data.table.
-    locality_point <- rbindlist(lapply(paths, fread))
+    locality_point <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(locality_point)
@@ -259,7 +259,7 @@ get_locality_neighbour <- function(setup = gnaf_setup_data){
     paths <- paths[!paths %ilike% "_STREET_"]
 
     # fread and bind together as a single data.table.
-    locality_neighbour <- rbindlist(lapply(paths, fread))
+    locality_neighbour <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(locality_neighbour)
@@ -297,7 +297,7 @@ get_locality_alias <- function(setup = gnaf_setup_data){
     paths <- paths[!paths %ilike% "_STREET_"]
 
     # fread and bind together as a single data.table.
-    locality_alias <- rbindlist(lapply(paths, fread))
+    locality_alias <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(locality_alias)
@@ -335,7 +335,7 @@ get_address_site <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_site <- rbindlist(lapply(paths, fread))
+    address_site <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_site)
@@ -373,7 +373,7 @@ get_address_site_geocode <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_site_geocode <- rbindlist(lapply(paths, fread))
+    address_site_geocode <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_site_geocode)
@@ -411,7 +411,7 @@ get_address_feature <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_feature <- rbindlist(lapply(paths, fread))
+    address_feature <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_feature)
@@ -449,7 +449,7 @@ get_address_detail <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_detail <- rbindlist(lapply(paths, fread))
+    address_detail <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_detail)
@@ -487,7 +487,7 @@ get_address_default_geocode <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_default_geocode <- rbindlist(lapply(paths, fread))
+    address_default_geocode <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_default_geocode)
@@ -525,7 +525,7 @@ get_address_alias <- function(setup = gnaf_setup_data){
 
 
     # fread and bind together as a single data.table.
-    address_alias <- rbindlist(lapply(paths, fread))
+    address_alias <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_alias)
@@ -562,7 +562,7 @@ get_state <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_state_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    state <- rbindlist(lapply(paths, fread))
+    state <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Creation date doesn't matter, not does retire state.
     state[, DATE_CREATED := NULL]
@@ -605,7 +605,7 @@ get_address_mesh_block_2011 <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_ADDRESS_MESH_BLOCK_2011_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    address_mesh_block_2011 <- rbindlist(lapply(paths, fread))
+    address_mesh_block_2011 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_mesh_block_2011[])
@@ -642,7 +642,7 @@ get_address_mesh_block_2016 <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_ADDRESS_MESH_BLOCK_2016_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    address_mesh_block_2016 <- rbindlist(lapply(paths, fread))
+    address_mesh_block_2016 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(address_mesh_block_2016[])
@@ -679,7 +679,7 @@ get_mb_2011 <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_mb_2011_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    mb_2011 <- rbindlist(lapply(paths, fread))
+    mb_2011 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(mb_2011[])
@@ -716,7 +716,7 @@ get_mb_2016 <- function(setup = gnaf_setup_data){
     paths <- dt[full_paths %ilike% "_mb_2016_psv"]$full_paths
 
     # fread and bind together as a single data.table.
-    mb_2016 <- rbindlist(lapply(paths, fread))
+    mb_2016 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
     return(mb_2016[])
