@@ -41,6 +41,8 @@ remotes::install_github("KyleHaynes/gnaf.r")
 
 ### Prerequisite steps
 
+The following three steps can be completed manually or with the function call `get_gnaf()` (see below example).
+
 1. Download G-NAF from data.gov.au: https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc/details?q=G-NAF
     * NOTE: File size is ~1.5GB compressed / ~7.7GB uncompressed.
 2. Extract the content of the compressed download to a desired location.
@@ -52,11 +54,26 @@ remotes::install_github("KyleHaynes/gnaf.r")
 # Load the package.
 library("gnaf.r")
 
+# Steps 1-3 in the `Prerequisite steps` section above can be completed from within R.
+# If G-NAF is already download, scipt this step.
+# Download and unpack G-NAF to the "c:/temp/" folder.
+get_gnaf(dest_folder = "c:/temp")
+# Verbose output example:
+    # ------------------
+    # The download is approximately 1.5Gb, depending on your internet speed, the following may take a while.
+    # The G-NAF zip file is currently being downloaded to: C:\temp\feb20_gnaf_pipeseparatedvalue.zip
+    # ------------------
+    # G-NAF has been download and is now uncompressing.
+    # ------------------
+    # You can now call the `setup()` to begin the initial setup of G-NAF. Be sure to toggle the `states` argument to only import relevant jurisdictions.
+
+    # Example setup call: setup(dir = "C:\\temp\\G-NAF\\G-NAF FEBRUARY 2020", states = "tas|act")
+
+
 # Setup the session before importing G-NAF. This step has two primary purposes.
     # 1. Define the location of the G-NAF (month year) root path (./G-NAF <MONTH> <YEAR>).
     # 2. Define which jurisdictions to import (case insensitive regex on State abbreviations).
-setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020",
-      states = "tas|act")
+setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "tas|act")
 
 # Import G-NAF for Tasmania and the ACT.
 gnaf <- build_gnaf()
