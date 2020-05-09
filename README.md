@@ -55,7 +55,7 @@ The following three steps can be completed manually or with the function call `g
 library("gnaf.r")
 
 # Steps 1-3 in the `Prerequisite steps` section above can be completed from within R.
-# If G-NAF is already download, scipt this step.
+    # Note: If G-NAF is already downloaded, you can skip this function call.
 # Download and unpack G-NAF to the "c:/temp/" folder.
 get_gnaf(dest_folder = "c:/temp")
 # Verbose output example:
