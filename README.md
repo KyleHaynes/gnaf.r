@@ -1,6 +1,6 @@
 # gnaf.r
 
-An R package to assist with importing the (Australian) G-NAF into R.
+An R package to assist with the downloading / importing / manipulation of the (Australian) Geocoded - National Address File.
 
 ## What is G-NAF?
 
@@ -216,3 +216,4 @@ From https://psma.com.au/g-naf-links-official-to-in-use-addresses:
 
 > Incorporates or developed using G-NAF ©PSMA Australia Limited licensed by the Commonwealth of Australia under the Open Geo-coded National Address File (G-NAF) End User Licence Agreement.
 
+**Special thanks** to the Turnbull Government that the innovative and invaluable step to making this data open to all Australians.
