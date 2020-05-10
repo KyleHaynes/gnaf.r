@@ -1,6 +1,8 @@
 # gnaf.r
 
-An R package to assist with the downloading / importing / manipulation of the (Australian) Geocoded - National Address File.
+An R package to assist with the downloading / importing / manipulation of the (Australian) Geocoded - National Address File (G-NAF).
+
+> Addresses are a cultural artefact, created from language rather than rules and legislation [*](https://psma.com.au/g-naf-links-official-to-in-use-addresses)
 
 ## What is G-NAF?
 
@@ -206,9 +208,6 @@ gnaf[, .N, STATE_NAME]
 
 Issues / Bugs / Suggestions: https://github.com/KyleHaynes/gnaf.r/issues
 
-From https://psma.com.au/g-naf-links-official-to-in-use-addresses:
-
-> "Addresses are a cultural artefact, created from language rather than rules and legislation"
 
 # Data Licenses / Attribution
 
