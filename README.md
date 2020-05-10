@@ -60,12 +60,14 @@ library("gnaf.r")
 get_gnaf(dest_folder = "c:/temp")
 # Verbose output example:
     # ------------------
-    # The download is approximately 1.5Gb, depending on your internet speed, the following may take a while.
+    # The download is approximately 1.5Gb, depending on your internet speed, the 
+    # following may take a while.
     # The G-NAF zip file is currently being downloaded to: C:\temp\feb20_gnaf_pipeseparatedvalue.zip
     # ------------------
     # G-NAF has been download and is now uncompressing.
     # ------------------
-    # You can now call the `setup()` to begin the initial setup of G-NAF. Be sure to toggle the `states` argument to only import relevant jurisdictions.
+    # You can now call the `setup()` to begin the initial setup of G-NAF. Be sure to toggle the
+    # `states` argument to only import relevant jurisdictions.
 
     # Example setup call: setup(dir = "C:\\temp\\G-NAF\\G-NAF FEBRUARY 2020", states = "tas|act")
 
@@ -78,7 +80,8 @@ setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "tas|act")
 # Import G-NAF for Tasmania and the ACT.
 gnaf <- build_gnaf()
 
-# Import again, defining `simple = TRUE` to remove potential non-address related variables (i.e reduce the output to just address information).
+# Import again, defining `simple = TRUE` to remove potential non-address related
+# variables (i.e reduce the output to just address information).
 gnaf_simple <- build_gnaf(simple = TRUE)
 
 # Inspect the stucture of each object.
@@ -165,18 +168,16 @@ str(gnaf_simple)
     #  - attr(*, ".internal.selfref")=<externalptr> 
     #  - attr(*, "sorted")= chr "ADDRESS_DETAIL_PID"
 
-
 # Size of each object (gigabytes).
 format(object.size(gnaf), units = "Gb")
 # [1] "0.3 Gb"
 format(object.size(gnaf_simple), units = "Gb")
 # [1] "0.1 Gb"
 
-
-# Attempt to build the entire country (and Other Teritoies: "OT").
+# Attempt to build the entire country (including Other Territories: "OT").
 setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "")
 
-# Import G-NAF for all jurisdictions.
+# Import all jurisdictions.
 gnaf <- build_gnaf()
 
 # Dimensions of output.
@@ -186,7 +187,6 @@ dim(gnaf)
 # Object size.
 format(object.size(gnaf), units = "Gb")
 # [1] "8.9 Gb"
-
 
 # Frequency table by State.
 gnaf[, .N, STATE_NAME]
