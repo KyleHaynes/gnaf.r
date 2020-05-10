@@ -176,7 +176,7 @@ format(object.size(gnaf_simple), units = "Gb")
 # Attempt to build the entire country (and Other Teritoies: "OT").
 setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "")
 
-# Import G-NAF for Tasmania and the ACT.
+# Import G-NAF for all jurisdictions.
 gnaf <- build_gnaf()
 
 # Dimensions of output.
