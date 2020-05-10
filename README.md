@@ -209,3 +209,10 @@ Issues / Bugs / Suggestions: https://github.com/KyleHaynes/gnaf.r/issues
 From https://psma.com.au/g-naf-links-official-to-in-use-addresses:
 
 > "Addresses are a cultural artefact, created from language rather than rules and legislation"
+
+# Data Licenses / Attribution
+
+> G-NAF ©PSMA Australia Limited licensed by the Commonwealth of Australia under the Open Geo-coded National Address File (G-NAF) End User Licence Agreement.
+
+> Incorporates or developed using G-NAF ©PSMA Australia Limited licensed by the Commonwealth of Australia under the Open Geo-coded National Address File (G-NAF) End User Licence Agreement.
+
