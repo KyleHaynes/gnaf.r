@@ -205,3 +205,7 @@ gnaf[, .N, STATE_NAME]
 ## Other
 
 Issues / Bugs / Suggestions: https://github.com/KyleHaynes/gnaf.r/issues
+
+From https://psma.com.au/g-naf-links-official-to-in-use-addresses:
+
+> "Addresses are a cultural artefact, created from language rather than rules and legislation"
