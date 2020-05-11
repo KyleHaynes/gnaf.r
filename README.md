@@ -215,4 +215,4 @@ Issues / Bugs / Suggestions: https://github.com/KyleHaynes/gnaf.r/issues
 
 > Incorporates or developed using G-NAF ©PSMA Australia Limited licensed by the Commonwealth of Australia under the Open Geo-coded National Address File (G-NAF) End User Licence Agreement.
 
-**Special thanks** to the Turnbull Government that the innovative and invaluable step to making this data open to all Australians.
+**Special thanks** to the Turnbull Government for the innovative and invaluable step in making this data open to all Australians.
