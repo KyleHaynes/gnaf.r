@@ -77,9 +77,9 @@ get_gnaf(dest_folder = "c:/temp")
 # Setup the session before importing G-NAF. This step has two primary purposes.
     # 1. Define the location of the G-NAF (month year) root path (./G-NAF <MONTH> <YEAR>).
     # 2. Define which jurisdictions to import (case insensitive regex on State abbreviations).
-setup(dir = "C:/temp/G-NAF/G-NAF FEBRUARY 2020", states = "tas|act")
+setup(dir = "C:/temp/G-NAF/G-NAF NOVEMBER 2020", states = "qld")
 
-# Import G-NAF for Tasmania and the ACT.
+# Import G-NAF for Queensland.
 gnaf <- build_gnaf()
 
 # Import again, defining `simple = TRUE` to remove potential non-address related
