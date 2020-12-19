@@ -1,6 +1,6 @@
 Package: gnaf.r
 Title: Import G-NAF in to R.
-Version: 0.0.0.9008
+Version: 0.0.0.9009
 Authors@R: 
     person(given = "Kyle",
            family = "Haynes",
