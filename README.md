@@ -71,7 +71,7 @@ get_gnaf(dest_folder = "c:/temp")
     # You can now call the `setup()` to begin the initial setup of G-NAF. Be sure to toggle the
     # `states` argument to only import relevant jurisdictions.
 
-    # Example setup call: setup(dir = "C:\\temp\\G-NAF\\G-NAF FEBRUARY 2020", states = "tas|act")
+    # Example setup call: setup(dir = "C:\\temp\\G-NAF\\G-NAF NOVEMBER 2020", states = "qld")
 
 
 # Setup the session before importing G-NAF. This step has two primary purposes.
