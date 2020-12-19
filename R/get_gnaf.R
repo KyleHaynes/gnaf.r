@@ -22,7 +22,11 @@
 
 #' @import data.table
 #' @export
-get_gnaf <- function(url = "https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-b943-5326ef1dbecc/resource/4b084096-65e4-4c8e-abbe-5e54ff85f42f/download/feb20_gnaf_pipeseparatedvalue.zip",
+
+# For reference, following was the feb link:
+# https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-b943-5326ef1dbecc/resource/4b084096-65e4-4c8e-abbe-5e54ff85f42f/download/feb20_gnaf_pipeseparatedvalue.zip
+
+get_gnaf <- function(url = "https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-b943-5326ef1dbecc/resource/4b084096-65e4-4c8e-abbe-5e54ff85f42f/download/nov20_gnaf_pipeseparatedvalue.zip",
                     dest_folder = "./",
                     recursive = TRUE,
                     verbose = TRUE){
