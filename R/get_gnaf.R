@@ -37,8 +37,7 @@ get_gnaf <- function(url = "https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-
         slash <- "/"
     }
 
-
-    dest_folder <-  normalizePath(dest_folder,  winslash = slash)
+    dest_folder <- normalizePath(dest_folder,  winslash = slash)
     dir.create(dest_folder, showWarnings = FALSE, recursive = recursive)
     if(!file.exists(dest_folder)){
         if(!recursive) stop("The destination folder (\"", dest_folder, "\") can't be created due to potential permission errors.")

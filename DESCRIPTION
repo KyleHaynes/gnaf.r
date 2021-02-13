@@ -1,6 +1,6 @@
 Package: gnaf.r
-Title: Import G-NAF in to R.
-Version: 0.0.0.9009
+Title: Import the (Australian) Geocoded - National Address File (G-NAF) in to R.
+Version: 0.0.1.0
 Authors@R: 
     person(given = "Kyle",
            family = "Haynes",
@@ -15,4 +15,4 @@ BugReports: https://github.com/KyleHaynes/gnaf.r/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

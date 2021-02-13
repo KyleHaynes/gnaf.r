@@ -9,6 +9,8 @@ build_gnaf(
   simple = FALSE,
   drop_empty_vars = TRUE,
   drop_date_variables = TRUE,
+  missing = "",
+  concatenate = TRUE,
   add_geo_coordinate = TRUE,
   add_meshblock_2011 = TRUE,
   add_meshblock_2016 = TRUE,
@@ -25,6 +27,11 @@ build_gnaf(
 \item{drop_empty_vars}{A logical argument to remove empty fields. Default is \code{TRUE}.}
 
 \item{drop_date_variables}{A logical argument to remove date (creation / retire / modification) fields. Default is \code{TRUE}.}
+
+\item{missing}{A character or NA to determine what empty (missing) observations should be. Default is \code{""}.}
+
+\item{concatenate}{A logical argument to add determine if a full address string should be
+constructed. Default is \code{TRUE}.}
 
 \item{add_geo_coordinate}{A logical argument to add geographical coordinate latitude and longitude fields. Default is \code{TRUE}.}
 

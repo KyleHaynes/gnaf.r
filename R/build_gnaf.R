@@ -13,6 +13,11 @@
 
 #' @param drop_date_variables A logical argument to remove date (creation / retire / modification) fields. Default is \code{TRUE}.
 
+#' @param missing A character or NA to determine what empty (missing) observations should be. Default is \code{""}.
+
+#' @param concatenate A logical argument to add determine if a full address string should be
+#'        constructed. Default is \code{TRUE}.
+
 #' @param add_geo_coordinate A logical argument to add geographical coordinate latitude and longitude fields. Default is \code{TRUE}.
 
 #' @param add_meshblock_2011 A logical argument to Mesh Block 2011 fields. Default is \code{TRUE}.
@@ -42,6 +47,8 @@ build_gnaf <- function(setup = gnaf_setup_data,
                        simple = FALSE,
                        drop_empty_vars = TRUE,
                        drop_date_variables = TRUE,
+                       missing = "",
+                       concatenate = TRUE,
                        add_geo_coordinate = TRUE,
                        add_meshblock_2011 = TRUE,
                        add_meshblock_2016 = TRUE,
@@ -290,6 +297,68 @@ build_gnaf <- function(setup = gnaf_setup_data,
 
     order_vars <- order_vars[order_vars %in% names(dt)]
     setcolorder(dt, order_vars)
+
+    # If missing is character, replace NAs.
+    if(missing == ""){
+        gnaf.r:::char_na_to_empty(dt)
+    }
+
+    # If concatenate, concatenate address.
+    if(concatenate){
+        browser()
+
+        # Units
+        dt[FLAT_NUMBER_PREFIX != "" | FLAT_NUMBER != "" | FLAT_NUMBER_SUFFIX != "", address := paste(paste0(
+                                    FLAT_NUMBER_PREFIX,
+                                    FLAT_NUMBER,
+                                    FLAT_NUMBER_SUFFIX),
+                                paste0(
+                                    NUMBER_FIRST,
+                                    NUMBER_FIRST_SUFFIX,
+                                    "-",
+                                    NUMBER_LAST,
+                                    NUMBER_LAST_SUFFIX
+                                ),
+                                STREET_NAME,
+                                STREET_TYPE,
+                                STREET_SUFFIX,
+                                LOCALITY_NAME,
+                                STATE_NAME,
+                                POSTCODE
+            )]
+    
+        # Non-units (street number)
+        dt[FLAT_NUMBER_PREFIX == "" & FLAT_NUMBER == "" & FLAT_NUMBER_SUFFIX == "" & NUMBER_FIRST != "", address := paste(
+                                paste0(
+                                    NUMBER_FIRST,
+                                    NUMBER_FIRST_SUFFIX,
+                                    "-",
+                                    NUMBER_LAST,
+                                    NUMBER_LAST_SUFFIX
+                                ),
+                                STREET_NAME,
+                                STREET_TYPE,
+                                STREET_SUFFIX,
+                                LOCALITY_NAME,
+                                STATE_NAME,
+                                POSTCODE
+            )]
+
+        # Non-units (lots)
+        dt[FLAT_NUMBER_PREFIX == "" & FLAT_NUMBER == "" & FLAT_NUMBER_SUFFIX == "" & NUMBER_FIRST == "", address := paste(
+                                "LOT",
+                                LOT_NUMBER,
+                                STREET_NAME,
+                                STREET_TYPE,
+                                STREET_SUFFIX,
+                                LOCALITY_NAME,
+                                STATE_NAME,
+                                POSTCODE
+            )]
+
+        dt[, address := trimws(gsub("\\- ", " ", address, perl = TRUE))]
+        dt[, address := gsub("  +", " ", address, perl = TRUE)]
+    }
 
     return(dt[])
 }
