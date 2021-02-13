@@ -305,8 +305,6 @@ build_gnaf <- function(setup = gnaf_setup_data,
 
     # If concatenate, concatenate address.
     if(concatenate){
-        browser()
-
         # Units
         dt[FLAT_NUMBER_PREFIX != "" | FLAT_NUMBER != "" | FLAT_NUMBER_SUFFIX != "", address := paste(paste0(
                                     FLAT_NUMBER_PREFIX,
