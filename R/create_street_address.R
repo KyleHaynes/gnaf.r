@@ -22,13 +22,18 @@
 
 #' @import data.table
 #' @export
-create_street_variations <- function(...,
+create_street_variations <- function(gnaf_obj = NULL,
+                                ...,
                                 string_var = "STREET_ADDRESS",
                                 verbose = TRUE) {
 
 
     # Build G-NAF
-    gnaf_data <- build_gnaf(...)
+    if(is.null(gnaf_obj)){
+        gnaf_data <- build_gnaf(...)
+    } else {
+        gnaf_data <- copy(gnaf_obj)
+    }
 
     # Add new variable ...
     gnaf_data[, (string_var) := NA_character_]

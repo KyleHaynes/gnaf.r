@@ -5,7 +5,12 @@
 \alias{create_street_variations}
 \title{Creates street address strings from G-NAF.}
 \usage{
-create_street_variations(..., string_var = "STREET_ADDRESS", verbose = TRUE)
+create_street_variations(
+  gnaf_obj = NULL,
+  ...,
+  string_var = "STREET_ADDRESS",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{string_var}{A character string for the output street address string. Default is \code{FALSE}.}
