@@ -1,4 +1,4 @@
-#' @name create_street_address
+#' @name create_street_variations
 
 #' @title Creates street address strings from G-NAF.
 
