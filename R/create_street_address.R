@@ -22,35 +22,84 @@
 
 #' @import data.table
 #' @export
-create_street_address <- function(gnaf_data,
+create_street_variations <- function(...,
                                 string_var = "STREET_ADDRESS",
-                                verbose = TRUE){
-               
-    for (i in names(gnaf_data)){
-        gnaf_data[is.na(get(i)), (i) := ""]
-    }
+                                verbose = TRUE) {
 
+
+    # Build G-NAF
+    gnaf_data <- build_gnaf(...)
+
+    # Add new variable ...
     gnaf_data[, (string_var) := NA_character_]
-    # Lots with no numbers
-    gnaf_data[LOT_NUMBER != "" & NUMBER_FIRST == "", (string_var) := paste0("LOT ", LOT_NUMBER,
-                                                                               " ", FLAT_TYPE,
-                                                                               " ", FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
-                                                                               " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
-    # With 1 number
-    gnaf_data[NUMBER_FIRST != "" & NUMBER_LAST == "", (string_var) := paste0(FLAT_TYPE,
-                                                                               " ", FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
-                                                                               " ", NUMBER_FIRST, NUMBER_FIRST_SUFFIX,
-                                                                               " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
+    
+
+    # ---- First Run ----
     # With range number
-    gnaf_data[NUMBER_FIRST != "" & NUMBER_LAST != "", (string_var) := paste0(FLAT_TYPE,
-                                                                               " ", FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
-                                                                               " ", NUMBER_FIRST, NUMBER_FIRST_SUFFIX,
-                                                                               "-", NUMBER_LAST, NUMBER_LAST_SUFFIX,
-                                                                               " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
+    gnaf_data[, (string_var) := paste0(
+        FLAT_TYPE, " ", FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
+        # Add street number info if it exists...
+        fifelse(NUMBER_FIRST != "", paste0(" ", NUMBER_FIRST, NUMBER_FIRST_SUFFIX),
+        # Otherwise, add lot number if it exists... 
+        fifelse(NUMBER_FIRST == "" & LOT_NUMBER != "", paste0(" LOT ", LOT_NUMBER, LOT_NUMBER_SUFFIX), "YYYYYY"), "XXXXXX"
+        ),
+        # If Street number is a range, add that.
+        fifelse(NUMBER_LAST != "", paste0("-", NUMBER_LAST, NUMBER_LAST_SUFFIX), ""),
+        " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
 
-    gnaf_data[, (string_var)  := trimws(gsub("  +", " ", get(..string_var), perl = TRUE))]
 
-    for (i in names(gnaf_data)){
-        gnaf_data[get(i) == "", (i) := NA]
-    }
+    vec_vars <- c("ADDRESS_DETAIL_PID", "CONFIDENCE", "STREET_ADDRESS", "POSTCODE", "LOCALITY_NAME")
+
+    o <- gnaf_data[, ..vec_vars]
+
+    # ---- Unit variations ----
+    # Remove flat Type
+    gnaf_data[, (string_var) := NA_character_]
+    gnaf_data[l <<- FLAT_TYPE != "", (string_var) := paste0(
+        FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
+        # Add street number info if it exists...
+        fifelse(NUMBER_FIRST != "", paste0(" ", NUMBER_FIRST, NUMBER_FIRST_SUFFIX),
+        # Otherwise, add lot number if it exists... 
+        fifelse(NUMBER_FIRST == "" & LOT_NUMBER != "", paste0(" LOT ", LOT_NUMBER, LOT_NUMBER_SUFFIX), "YYYYYY"), "XXXXXX"
+        ),
+        # If Street number is a range, add that.
+        fifelse(NUMBER_LAST != "", paste0("-", NUMBER_LAST, NUMBER_LAST_SUFFIX), ""),
+        " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
+
+    o <- rbind(o, gnaf_data[l, ..vec_vars])
+
+    # Add / sep for flats ...
+    gnaf_data[, (string_var) := NA_character_]
+    gnaf_data[l <<- FLAT_TYPE != "", (string_var) := paste0(
+        FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
+        # Add street number info if it exists...
+        fifelse(NUMBER_FIRST != "", paste0("/", NUMBER_FIRST, NUMBER_FIRST_SUFFIX),
+        # Otherwise, add lot number if it exists... 
+        fifelse(NUMBER_FIRST == "" & LOT_NUMBER != "", paste0(" LOT ", LOT_NUMBER, LOT_NUMBER_SUFFIX), "YYYYYY"), "XXXXXX"
+        ),
+        # If Street number is a range, add that.
+        fifelse(NUMBER_LAST != "", paste0("-", NUMBER_LAST, NUMBER_LAST_SUFFIX), ""),
+        " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
+
+    o <- rbind(o, gnaf_data[l, ..vec_vars])
+
+    # Remove ranges (i.e add both range variation) ...
+    gnaf_data[, (string_var) := NA_character_]
+    gnaf_data[l <<- NUMBER_LAST != "", (string_var) := paste0(
+        FLAT_NUMBER_PREFIX, FLAT_NUMBER, FLAT_NUMBER_SUFFIX,
+        # Add street number info if it exists...
+        fifelse(NUMBER_FIRST != "", paste0(" ", NUMBER_FIRST, NUMBER_FIRST_SUFFIX),
+        # Otherwise, add lot number if it exists... 
+        fifelse(NUMBER_FIRST == "" & LOT_NUMBER != "", paste0(" LOT ", LOT_NUMBER, LOT_NUMBER_SUFFIX), "YYYYYY"), "XXXXXX"
+        ),
+        # # If Street number is a range, add that.
+        # fifelse(NUMBER_LAST != "", paste0("-", NUMBER_LAST, NUMBER_LAST_SUFFIX), ""),
+        " ", STREET_NAME, " ", STREET_TYPE, " ", STREET_SUFFIX)]
+
+    o <- rbind(o, gnaf_data[l, ..vec_vars])
+
+    # Finally, trim and remove redundant space.
+    o[, (string_var)  := trimws(gsub("  +", " ", get(..string_var), perl = TRUE))]
+
+    return(o[])
 }
