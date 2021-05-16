@@ -8,7 +8,10 @@ Authors@R:
            email = "kyle@kylehaynes.com.au")
 Description: A set of convenience functions for reading G-NAF in to R.
 Depends: R (>= 3.4.0)
-Imports: data.table
+Imports: data.table,
+         shiny,
+         shinyBS,
+         DT
 License: use_mit_license()
 URL: https://github.com/KyleHaynes/gnaf.r
 BugReports: https://github.com/KyleHaynes/gnaf.r/issues
