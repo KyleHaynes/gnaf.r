@@ -32,6 +32,8 @@
 #              , phone_1 = r_phone_numbers(n)
 #              , phone_2 = r_phone_numbers(n)
 #              , phone_3 = r_phone_numbers(n)
+#              , group_1 = sample(c(1:30, rep(NA, 200)), n, replace = T)
+#              , group_2 = sample(c(1:30, rep(NA, 200)), n, replace = T)
 #              , dob = r_date_of_births(n, start = as.Date("1900-01-01"), end = Sys.Date()))
 
 # d <- iris
@@ -54,8 +56,8 @@ search_data <- function(d){
     #      ),
         mainPanel(width = 12,
         bsCollapse(id = "collapseExample", multiple = T, open = c("Setup", "Search", "Results"),
-                    bsCollapsePanel("Setup", "Select / Remove variables you want to view...", style = "success", width = "100%"
-                        , "Subset vars:"
+                    bsCollapsePanel("Setup", "Select / Remove variables you want to view...", style = "success"
+                        # , "Subset vars:"
                         , selectInput("sub_vars", NULL, names(d), selected = names(d), multiple = T, selectize = T, width = "50%")
                     ),
 
@@ -113,6 +115,7 @@ search_data <- function(d){
 
                         # , textInput("threshold", "Threshold:", value = "1", width = NULL, placeholder = NULL)
                         , selectInput("threshold", "Threshold:", as.character(1:10), selected = "1", multiple = F)
+                        , selectInput("group_vars", "Group variables:", names(d), multiple = T)
                         , actionButton("action", label = "Search ...")
 
                         # End of panel 1 
@@ -175,6 +178,16 @@ search_data <- function(d){
                 output$results_3 <- renderText({as.character(paste(res_3, collapse = ", "))})
             }
 
+            # Grouping stuff ...
+            gr <- input$group_vars
+            if(length(gr) >= 1){
+                # browser()
+                d[, group_flag := FALSE]
+                for(i in 1:length(gr)){
+                    gids <- d[l >= 1 & !eval(as.name(gr[i])) %in% c("", NA), get(..gr[i])]
+                    d[eval(as.name(gr[i])) %in% gids, group_flag := TRUE]
+                }
+            }
 
             vars <- input$sub_vars
             # browser()
@@ -182,9 +195,15 @@ search_data <- function(d){
                 vars <- names(d)[1:2]
             }
 
-            output$mytable = DT::renderDataTable({
-                head(d[l >= as.numeric(input$threshold), ..vars], 1000)
-            })
+            if(length(gr) >= 1){
+                output$mytable = DT::renderDataTable({
+                    head(d[(group_flag) | l >= as.numeric(input$threshold), ..vars], 1000)
+                })
+                } else {
+                output$mytable = DT::renderDataTable({
+                    head(d[l >= as.numeric(input$threshold), ..vars], 1000)
+                })
+                }
 
         })
 
@@ -234,3 +253,6 @@ comp <- function(x, y, type = comp_types){
         `%plike%` <- function (vector, pattern) {
             like(vector, pattern, perl = TRUE)
         }
+
+
+x <- search_data
