@@ -59,9 +59,9 @@ search_data <- function(d){
                         , selectInput("sub_vars", NULL, names(d), selected = names(d), multiple = T, selectize = T, width = "50%")
                     ),
 
-                    bsCollapsePanel("Search", style = "info", width = "100%"
+                    bsCollapsePanel("Search", style = "info"
                         # ---- Subset Vars ----
-                        , "Search"
+                        
                         
                         # ---- First search
                         , fluidRow(
@@ -138,21 +138,7 @@ search_data <- function(d){
     #      updateCollapse(session, "collapseExample", style = list("Panel 1" = input$styleSelect))
     #    }))
 
-        like <- function (vector, pattern, ignore.case = FALSE, fixed = FALSE, perl = FALSE) 
-        {
-            if (is.factor(vector)) {
-                as.integer(vector) %in% grep(pattern, levels(vector), 
-                    ignore.case = ignore.case, fixed = fixed, perl = perl)
-            }
-            else {
-                grepl(pattern, vector, ignore.case = ignore.case, fixed = fixed, perl = perl)
-            }
-        }
 
-
-        `%plike%` <- function (vector, pattern) {
-            like(vector, pattern, perl = TRUE)
-        }
 
 
         
@@ -229,4 +215,22 @@ comp <- function(x, y, type = comp_types){
                 x %plike% y 
             } 
 
+        }
+
+#' @export
+        like <- function (vector, pattern, ignore.case = FALSE, fixed = FALSE, perl = FALSE) 
+        {
+            if (is.factor(vector)) {
+                as.integer(vector) %in% grep(pattern, levels(vector), 
+                    ignore.case = ignore.case, fixed = fixed, perl = perl)
+            }
+            else {
+                grepl(pattern, vector, ignore.case = ignore.case, fixed = fixed, perl = perl)
+            }
+        }
+
+
+#' @export
+        `%plike%` <- function (vector, pattern) {
+            like(vector, pattern, perl = TRUE)
         }
