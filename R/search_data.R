@@ -37,6 +37,10 @@
 # d <- iris
 # d <- data.frame(lapply(d, as.character), stringsAsFactors=FALSE)
 # setDT(d)
+
+# source("C:\\Users\\kyleh\\OneDrive\\Desktop\\gnaf_r\\R\\search_data.R")
+# search_data(d)
+
 search_data <- function(d){
 
     app = shinyApp(
@@ -49,11 +53,14 @@ search_data <- function(d){
     #                 #    c("default", "primary", "danger", "warning", "info", "success"))
     #      ),
         mainPanel(width = 12,
-        bsCollapse(id = "collapseExample", multiple = T, #open = "Panel 2",
-                    bsCollapsePanel("Search", "Select / Remove variables you want to view...", style = "info", width = "100%"
-                        # ---- Subset Vars ----
+        bsCollapse(id = "collapseExample", multiple = T, open = c("Setup", "Search", "Results"),
+                    bsCollapsePanel("Setup", "Select / Remove variables you want to view...", style = "success", width = "100%"
                         , "Subset vars:"
                         , selectInput("sub_vars", NULL, names(d), selected = names(d), multiple = T, selectize = T, width = "50%")
+                    ),
+
+                    bsCollapsePanel("Search", style = "info", width = "100%"
+                        # ---- Subset Vars ----
                         , "Search"
                         
                         # ---- First search
@@ -62,7 +69,7 @@ search_data <- function(d){
                             selectInput("var_1", NULL, names(d), selected = names(d)[1], multiple = T)
                             ),
                             column(1,
-                            selectInput("comp_1", NULL, comp_types, selected = comp_types[5], multiple = F)
+                            selectInput("comp_1", NULL, gnaf.r:::comp_types, selected = gnaf.r:::comp_types[5], multiple = F)
                             ),
                             column(2, # offset = 4,
                             textInput("val_1", NULL, value = "", width = NULL, placeholder = NULL)
@@ -78,7 +85,7 @@ search_data <- function(d){
                             selectInput("var_2", NULL, names(d), selected = names(d)[2], multiple = T)
                             ),
                             column(1,
-                            selectInput("comp_2", NULL, comp_types, selected = comp_types[5], multiple = F)
+                            selectInput("comp_2", NULL, gnaf.r:::comp_types, selected = gnaf.r:::comp_types[5], multiple = F)
                             ),
                             column(2, # offset = 4,
                             textInput("val_2", NULL, value = "", width = NULL, placeholder = NULL)
@@ -94,7 +101,7 @@ search_data <- function(d){
                             selectInput("var_3", NULL, names(d), selected = names(d)[3], multiple = T)
                             ),
                             column(1,
-                            selectInput("comp_3", NULL, comp_types, selected = comp_types[5], multiple = F)
+                            selectInput("comp_3", NULL, gnaf.r:::comp_types, selected = gnaf.r:::comp_types[5], multiple = F)
                             ),
                             column(2, # offset = 4,
                             textInput("val_3", NULL, value = "", width = NULL, placeholder = NULL)
@@ -110,8 +117,8 @@ search_data <- function(d){
 
                         # End of panel 1 
                     ),
-                    bsCollapsePanel("Results", "This panel has a generic plot. ", "and a 'success' style.", 
-                    # Panel two shit                  
+                    bsCollapsePanel("Results", 
+                    # Panel 3                
                     DT::dataTableOutput("mytable")
         )
         )
@@ -147,25 +154,6 @@ search_data <- function(d){
             like(vector, pattern, perl = TRUE)
         }
 
-        comp_types <- c("==", "%ilike%", "%like%", "%flike%", "%plike%")
-        comp <- function(x, y, type = comp_types){
-
-            if(length(type) > 1) type <- type[5]
-
-            if(type == "=="){
-                x == y
-            } else if(type == "%ilike%"){
-                x %ilike% y 
-            } else if(type == "%like%"){
-                x %like% y 
-            } else if(type == "%flike%"){
-                x %like% y 
-            } else if(type == "%plike%"){
-                x %plike% y 
-            } 
-
-        }
-
 
         
         observeEvent(input$action, {
@@ -177,7 +165,7 @@ search_data <- function(d){
                 res_1 <- c()
                 for(i in 1:length(input$var_1)){
                     # browser()
-                    d[, l := l + (tmp <<- comp(eval(as.name(input$var_1[i])), input$val_1, input$comp_1))]
+                    d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(input$var_1[i])), input$val_1, input$comp_1))]
                     res_1 <- c(res_1, sum(tmp))
                 }
                 output$results_1 <- renderText({as.character(paste(res_1, collapse = ", "))})
@@ -186,7 +174,7 @@ search_data <- function(d){
             if(input$val_2 != ""){
                 res_2 <- c()
                 for(i in 1:length(input$var_2)){
-                    d[, l := l + (tmp <<- comp(eval(as.name(input$var_2[i])), input$val_2, input$comp_2))]
+                    d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(input$var_2[i])), input$val_2, input$comp_2))]
                     res_2 <- c(res_2, sum(tmp))
                 }
                 output$results_2 <- renderText({as.character(paste(res_2, collapse = ", "))})
@@ -195,7 +183,7 @@ search_data <- function(d){
             if(input$val_3 != ""){
                 res_3 <- c()
                 for(i in 1:length(input$var_3)){
-                    d[, l := l + (tmp <<- comp(eval(as.name(input$var_3[i])), input$val_3, input$comp_3))]
+                    d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(input$var_3[i])), input$val_3, input$comp_3))]
                     res_3 <- c(res_3, sum(tmp))
                 }
                 output$results_3 <- renderText({as.character(paste(res_3, collapse = ", "))})
@@ -222,3 +210,23 @@ runApp(app)
 }
 
 ## Not run: 
+
+
+comp_types <- c("==", "%ilike%", "%like%", "%flike%", "%plike%")
+comp <- function(x, y, type = comp_types){
+
+            if(length(type) > 1) type <- type[5]
+
+            if(type == "=="){
+                x == y
+            } else if(type == "%ilike%"){
+                x %ilike% y 
+            } else if(type == "%like%"){
+                x %like% y 
+            } else if(type == "%flike%"){
+                x %like% y 
+            } else if(type == "%plike%"){
+                x %plike% y 
+            } 
+
+        }
