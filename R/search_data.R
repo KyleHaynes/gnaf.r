@@ -14,6 +14,8 @@
 #' @import shiny
 #' @import shinyBS
 #' @import DT
+#' @import varhandle
+#' @import shinycssloaders
 #' @export
 
 # For reference, following was the feb link:
