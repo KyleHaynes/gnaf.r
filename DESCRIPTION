@@ -13,7 +13,8 @@ Imports: data.table,
          shinyBS,
          DT,
          shinycssloaders,
-         varhandle
+         varhandle,
+         languageserver
 License: use_mit_license()
 URL: https://github.com/KyleHaynes/gnaf.r
 BugReports: https://github.com/KyleHaynes/gnaf.r/issues
