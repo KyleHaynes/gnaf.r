@@ -1,6 +1,6 @@
 Package: gnaf.r
 Title: Import the (Australian) Geocoded - National Address File (G-NAF) in to R.
-Version: 0.0.1.2
+Version: 0.0.1.3
 Authors@R: 
     person(given = "Kyle",
            family = "Haynes",
@@ -11,7 +11,9 @@ Depends: R (>= 3.4.0)
 Imports: data.table,
          shiny,
          shinyBS,
-         DT
+         DT,
+         shinycssloaders,
+         varhandle
 License: use_mit_license()
 URL: https://github.com/KyleHaynes/gnaf.r
 BugReports: https://github.com/KyleHaynes/gnaf.r/issues
