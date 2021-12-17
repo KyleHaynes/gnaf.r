@@ -135,7 +135,7 @@ search_data <- function(d) {
                         bsCollapsePanel(
                             "Results",
                             # Panel 3
-                            DT::dataTableOutput("mytable") %>% varhandle::withSpinner(color = "#0dc5c1")
+                            DT::dataTableOutput("mytable") %>% shinycssloaders::withSpinner(color = "#0dc5c1")
                         )
                     )
                 )
