@@ -41,10 +41,12 @@
 # d <- iris
 # d <- data.frame(lapply(d, as.character), stringsAsFactors=FALSE)
 # setDT(d)
-search_data <- function(d) {
+
+search_data <- function(d, date_format = c("%Y-%m%-%d", "%d/%m/%Y"), copy_data = FALSE) {
     app <- shinyApp(    
         ui =
             fluidPage(
+                useShinyalert(),
                 #    sidebarLayout(
                 #      sidebarPanel(width = 1, # HTML("This button will open Panel 1 using <code>updateCollapse</code>."),
                 #                   actionButton("p1Button", "Push Me!") #,
@@ -55,10 +57,18 @@ search_data <- function(d) {
                     width = 12,
                     bsCollapse(
                         id = "collapseExample", multiple = T, open = c("Setup", "Search", "Results"),
+                        bsCollapsePanel("About", "About section",
+                            style = "primary"
+                            , ""
+                            
+                        ),
                         bsCollapsePanel("Setup", "Select / Remove variables you want to view...",
                             style = "success"
                             # , "Subset vars:"
                             , selectInput("sub_vars", NULL, names(d), selected = names(d), multiple = T, selectize = T, width = "50%")
+                            , "Do you want to hash any variables?"
+                            , selectInput("hash_vars", "hash", names(d), selected = NULL, multiple = T, selectize = T, width = "50%")
+                            , actionButton("hash", label = "hash ...")
                         ),
                         bsCollapsePanel("Search",
                             style = "info"
@@ -69,15 +79,15 @@ search_data <- function(d) {
                             , fluidRow(
                                 column(
                                     2,
-                                    selectInput("var_1", NULL, names(d), selected = NULL, multiple = T)
+                                    selectInput("var_1", "Search variable(s):", names(d), selected = NULL, multiple = T)
                                 ),
                                 column(
                                     1,
-                                    selectInput("comp_1", NULL, gnaf.r:::comp_types, selected = gnaf.r:::comp_types[5], multiple = F)
+                                    selectInput("comp_1", "Operator:", gnaf.r:::comp_types, selected = gnaf.r:::comp_types[5], multiple = F)
                                 ),
                                 column(
                                     2, # offset = 4,
-                                    textInput("val_1", NULL, value = "", width = NULL, placeholder = NULL)
+                                    textInput("val_1", "Search term:", value = "", width = NULL, placeholder = NULL)
                                 ),
                                 column(
                                     3, # offset = 4,
@@ -155,10 +165,14 @@ search_data <- function(d) {
                 #    }))
 
                 # Coerce to a data.table
-                if(!is.data.table(d)){
-                    d <- copy(data.table(d))
+                if(copy_data){
+                    if(!is.data.table(d)){
+                        d <- copy(data.table(d))
+                    } else {
+                        d <- copy(d)
+                    }
                 } else {
-                    d <- copy(d)
+                    d <- data.table(d)
                 }
 
                 if(any(names(d) == "l")){
@@ -166,20 +180,41 @@ search_data <- function(d) {
                 }
 
                 # Coerce specific columns to characters...
+                msg <- ""
                 for(i in names(d)){
 
                     if(class(d[[i]])[1] == "character"){
                         next
                     } else if(class(d[[i]])[1] %in% c("numeric", "integer", "factor")){
+                        msg <- paste(msg, "\nVariable `", i, "` has been coerced from a", class(d[[i]])[1], "to a character class.")
                         d[, (i) := as.character(get(..i))]
                     } else if(class(d[[i]])[1] %in% c("Date")){
-
+                        msg <- paste(msg, "\nVariable `", i, "` has been coerced from a", class(d[[i]])[1], "to a character class.")
                         d[, (i) := as.character(format(get(..i), "%Y-%m-%d"))]
                     } else if(class(d[[i]])[1] %in% c("list")){
-
+                        msg <- paste(msg, "\nVariable `", i, "` has been coerced from a", class(d[[i]])[1], "to a flat character (seperated by commas).")
                         d[, (i) := as.character(sapply(get(..i), paste, collapse = ", "))]
+                        # browser()
                     }
                 }
+
+                if(nchar(msg) >= 4){
+                    shinyalert("Please note", msg, type = "info", size = "l")
+                }
+
+
+                observeEvent(input$hash, {
+                    for(i in input$hash_vars){
+                        d[, paste0(i, "_hash") := phonics::soundex(get(..i))]
+                    # browser()
+                    }
+
+
+                    updateSelectInput(session = getDefaultReactiveDomain(), "var_1", "Search variable(s):", names(d), selected = NULL)
+                    updateSelectInput(session = getDefaultReactiveDomain(), "var_2", "Search variable(s):", names(d), selected = NULL)
+                    updateSelectInput(session = getDefaultReactiveDomain(), "var_3", "Search variable(s):", names(d), selected = NULL)
+
+                })
 
 
                 observeEvent(input$action, {
@@ -300,3 +335,4 @@ like <- function(vector, pattern, ignore.case = FALSE, fixed = FALSE, perl = FAL
 `%plike%` <- function(vector, pattern) {
     like(vector, pattern, perl = TRUE)
 }
+
