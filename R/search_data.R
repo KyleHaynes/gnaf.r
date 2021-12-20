@@ -1,48 +1,5 @@
-#' @name search_data
-
-#' @title Shiny convenience GUI for searching data
-
-#' @description Shiny convenience GUI for searching data
-
-
-#' @param d data.frame type object
-
-#' @author Kyle Haynes, \email{kyle@@kylehaynes.com.au}.
-
-
-#' @import data.table
-#' @import shiny
-#' @import shinyBS
-#' @import DT
-#' @import varhandle
-#' @import shinycssloaders
-#' @export
-
-# For reference, following was the feb link:
-# https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-b943-5326ef1dbecc/resource/4b084096-65e4-4c8e-abbe-5e54ff85f42f/download/feb20_gnaf_pipeseparatedvalue.zip
-
-# library(shiny)
-# library(shinyBS)
-# library(DT)
-# library(data.table)
-# library(generator)
-# n = 1000
-# d <- data.table(name = toupper(r_full_names(n))
-#              , alias_name_1 = toupper(r_full_names(n))
-#              , alias_name_2 = toupper(r_full_names(n))
-#              , alias_name_3 = toupper(r_full_names(n))
-#              , phone_1 = r_phone_numbers(n)
-#              , phone_2 = r_phone_numbers(n)
-#              , phone_3 = r_phone_numbers(n)
-#              , group_1 = sample(c(1:30, rep(NA, 200)), n, replace = T)
-#              , group_2 = sample(c(1:30, rep(NA, 200)), n, replace = T)
-#              , dob = r_date_of_births(n, start = as.Date("1900-01-01"), end = Sys.Date()))
-
-# d <- iris
-# d <- data.frame(lapply(d, as.character), stringsAsFactors=FALSE)
-# setDT(d)
 search_data <- function(d) {
-    app <- shinyApp(    
+    app <- shinyApp(
         ui =
             fluidPage(
                 #    sidebarLayout(
@@ -124,7 +81,7 @@ search_data <- function(d) {
                                     textOutput("results_3")
                                 )
                             ),
-                            
+
                             # , textInput("threshold", "Threshold:", value = "1", width = NULL, placeholder = NULL)
                             selectInput("threshold", "Threshold:", as.character(1:10), selected = "1", multiple = F),
                             selectInput("group_vars", "Group variables:", names(d), multiple = T),
@@ -155,37 +112,37 @@ search_data <- function(d) {
                 #    }))
 
                 # Coerce to a data.table
-                if(!is.data.table(d)){
+                if (!is.data.table(d)) {
                     d <- copy(data.table(d))
                 } else {
                     d <- copy(d)
                 }
 
-                if(any(names(d) == "l")){
+                if (any(names(d) == "l")) {
                     warnings("var names `l` is reserved for use in this function, it will be overwritten")
                 }
 
                 # Coerce specific columns to characters...
-                for(i in names(d)){
-
-                    if(class(d[[i]])[1] == "character"){
+                for (i in names(d)) {
+                    if (class(d[[i]])[1] == "character") {
                         next
-                    } else if(class(d[[i]])[1] %in% c("numeric", "integer", "factor")){
+                    } else if (class(d[[i]])[1] %in% c("numeric", "integer", "factor")) {
                         d[, (i) := as.character(get(..i))]
-                    } else if(class(d[[i]])[1] %in% c("Date")){
-
+                    } else if (class(d[[i]])[1] %in% c("Date")) {
                         d[, (i) := as.character(format(get(..i), "%Y-%m-%d"))]
-                    } else if(class(d[[i]])[1] %in% c("list")){
-
+                    } else if (class(d[[i]])[1] %in% c("list")) {
                         d[, (i) := as.character(sapply(get(..i), paste, collapse = ", "))]
                     }
                 }
 
 
                 observeEvent(input$action, {
-
                     l <- rep(F, nrow(d))
                     d[, l := F]
+
+                    if(exists("tmp", where = 1)){
+                        rm(tmp, pos = 1)
+                    }
 
                     if (input$val_1 != "") {
                         res_1 <- c()
@@ -193,6 +150,14 @@ search_data <- function(d) {
                             d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(input$var_1[i])), input$val_1, input$comp_1))]
                             res_1 <- c(res_1, sum(tmp))
                         }
+                        output$results_1 <- renderText({
+                            as.character(paste(res_1, collapse = ", "))
+                        })
+                    } else {
+                        if (exists("tmp", where = 1)) {
+                            rm(tmp)
+                        }
+                        res_1 <- 0
                         output$results_1 <- renderText({
                             as.character(paste(res_1, collapse = ", "))
                         })
@@ -207,6 +172,14 @@ search_data <- function(d) {
                         output$results_2 <- renderText({
                             as.character(paste(res_2, collapse = ", "))
                         })
+                    } else {
+                        if (exists("tmp", where = 1)) {
+                            rm(tmp, pos = 1)
+                        }
+                        res_2 <- 0
+                        output$results_2 <- renderText({
+                            as.character(paste(res_2, collapse = ", "))
+                        })
                     }
 
                     if (input$val_3 != "") {
@@ -218,12 +191,20 @@ search_data <- function(d) {
                         output$results_3 <- renderText({
                             as.character(paste(res_3, collapse = ", "))
                         })
+                    } else {
+                        if (exists("tmp", where = 1)) {
+                            rm(tmp, pos = 1)
+                        }
+                        res_3 <- 0
+                        output$results_3 <- renderText({
+                            as.character(paste(res_3, collapse = ", "))
+                        })
                     }
+
 
                     # Grouping stuff ...
                     gr <- input$group_vars
                     if (length(gr) >= 1) {
-    
                         d[, group_flag := FALSE]
                         for (i in 1:length(gr)) {
                             gids <- d[l >= 1 & !eval(as.name(gr[i])) %in% c("", NA), get(..gr[i])]
@@ -253,12 +234,10 @@ search_data <- function(d) {
                         output$mytable <- DT::renderDataTable({
                             head(d[l >= as.numeric(input$threshold), c(..vars, "l")][order(-l)], 10000)
                         }) # %>% formatStyle(
-                           #  2,
-                           # backgroundColor = styleEqual(1, c("KYLE JOHN", "ALYSIA MIN HEE"), c('gray', 'yellow'))
-                           # )
+                        #  2,
+                        # backgroundColor = styleEqual(1, c("KYLE JOHN", "ALYSIA MIN HEE"), c('gray', 'yellow'))
+                        # )
                     }
-
-
                 })
             }
     )
