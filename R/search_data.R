@@ -16,6 +16,7 @@ search_data <- function(d) {
                             style = "success"
                             # , "Subset vars:"
                             , selectInput("sub_vars", NULL, names(d), selected = names(d), multiple = T, selectize = T, width = "50%")
+                            , selectInput("hash_option", NULL, hasht_types, selected = hasht_types[1], multiple = F)
                         ),
                         bsCollapsePanel("Search",
                             style = "info"
@@ -35,6 +36,10 @@ search_data <- function(d) {
                                 column(
                                     2, # offset = 4,
                                     textInput("val_1", NULL, value = "", width = NULL, placeholder = NULL)
+                                ),
+                                column(
+                                    1, # offset = 4,
+                                     checkboxInput("hash_select_1", label = "Hash", value = FALSE)
                                 ),
                                 column(
                                     3, # offset = 4,
@@ -57,6 +62,10 @@ search_data <- function(d) {
                                     textInput("val_2", NULL, value = "", width = NULL, placeholder = NULL)
                                 ),
                                 column(
+                                    1, # offset = 4,
+                                     checkboxInput("hash_select_2", label = "Hash", value = FALSE)
+                                ),
+                                column(
                                     3, # offset = 4,
                                     textOutput("results_2")
                                 )
@@ -77,6 +86,10 @@ search_data <- function(d) {
                                     textInput("val_3", NULL, value = "", width = NULL, placeholder = NULL)
                                 ),
                                 column(
+                                    1, # offset = 4,
+                                     checkboxInput("hash_select_3", label = "Hash", value = FALSE)
+                                ),
+                                column(
                                     3, # offset = 4,
                                     textOutput("results_3")
                                 )
@@ -85,7 +98,7 @@ search_data <- function(d) {
                             # , textInput("threshold", "Threshold:", value = "1", width = NULL, placeholder = NULL)
                             selectInput("threshold", "Threshold:", as.character(1:10), selected = "1", multiple = F),
                             selectInput("group_vars", "Group variables:", names(d), multiple = T),
-                            actionButton("action", label = "Search ...")
+                            actionButton("search_action_button", label = "Search ...")
 
                             # End of panel 1
                         ),
@@ -136,18 +149,35 @@ search_data <- function(d) {
                 }
 
 
-                observeEvent(input$action, {
+                observeEvent(input$search_action_button, {
                     l <- rep(F, nrow(d))
                     d[, l := F]
 
-                    if(exists("tmp", where = 1)){
+                    if (exists("tmp", where = 1)) {
                         rm(tmp, pos = 1)
                     }
+
 
                     if (input$val_1 != "") {
                         res_1 <- c()
                         for (i in 1:length(input$var_1)) {
-                            d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(input$var_1[i])), input$val_1, input$comp_1))]
+
+                            # browser()
+                            search_1_term <- input$val_1
+                            search_1_var <- input$var_1[i]
+                            search_1_orig <- input$var_1[i]
+
+                            if(input$hash_select_1){
+                                search_1_var <- paste0(input$var_1[i], "_", input$hash_option, "_hAsH")
+                                tmpx <- try(d[1, ..search_1_var], silent = T)
+                                if(class(tmpx) == "try-error"){
+                                    browser()
+                                    d[, (search_1_var) := hasht(eval(as.name(search_1_orig)), input$hash_option)]
+                                }
+                            search_1_term <- hasht(search_1_term, input$hash_option)
+                            }
+
+                            d[, l := l + (tmp <<- gnaf.r:::comp(eval(as.name(search_1_var)), search_1_term, input$comp_1))]
                             res_1 <- c(res_1, sum(tmp))
                         }
                         output$results_1 <- renderText({
@@ -251,7 +281,9 @@ comp_types <- c("==", "%ilike%", "%like%", "%flike%", "%plike%")
 comp <- function(x, y, type = comp_types) {
     if (length(type) > 1) {
         type <- type[5]
-    } else if (type == "==") {
+    } 
+    
+    if (type == "==") {
         x == y
     } else if (type == "%ilike%") {
         x %ilike% y
@@ -263,6 +295,21 @@ comp <- function(x, y, type = comp_types) {
         x %plike% y
     }
 }
+
+hasht_types <- c("soundex", "metaphone")
+hasht <- function(x, type = hasht_types) {
+    if (length(type) > 1) {
+        type <- type[1]
+    } 
+    
+    if (type == "soundex") {
+        phonics::soundex(x)
+    } else if (type == "metaphone") {
+        phonics::metaphone(x)
+    }
+}
+
+
 
 #' @export
 like <- function(vector, pattern, ignore.case = FALSE, fixed = FALSE, perl = FALSE) {
