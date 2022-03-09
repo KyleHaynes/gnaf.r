@@ -12,8 +12,7 @@ build_gnaf(
   missing = "",
   concatenate = TRUE,
   add_geo_coordinate = TRUE,
-  add_meshblock_2011 = TRUE,
-  add_meshblock_2016 = TRUE,
+  add_meshblock_years = NULL,
   add_locality_alias_variants = FALSE,
   add_alias_links = FALSE,
   verbose = TRUE
@@ -35,9 +34,8 @@ constructed. Default is \code{TRUE}.}
 
 \item{add_geo_coordinate}{A logical argument to add geographical coordinate latitude and longitude fields. Default is \code{TRUE}.}
 
-\item{add_meshblock_2011}{A logical argument to Mesh Block 2011 fields. Default is \code{TRUE}.}
-
-\item{add_meshblock_2016}{A logical argument to Mesh Block 2016 fields. Default is \code{TRUE}.}
+\item{add_meshblock_years}{A character string specifying which meshblock years to add. Default
+is \code{FALSE}. Depending on what version of G-NAF you have sourced \code{c("2021", "2016", "2011")}.}
 
 \item{add_locality_alias_variants}{A logical argument to include locality alias variants. Default is \code{FALSE}.}
 

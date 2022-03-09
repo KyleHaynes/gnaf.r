@@ -13,9 +13,11 @@ get_gnaf(
 )
 }
 \arguments{
-\item{url}{A character vector identifying the root directory of where the G-NAF extract is located.}
+\item{url}{A character vector identifying the root directory of where the G-NAF extract is
+located. Note that it will always download the most recent gnaf, despite the default URL
+indicating Nov 2020}
 
-\item{dest_folder}{A regular expression of which Australian State jurisdictions to import.  Default is \code{"./"}.}
+\item{dest_folder}{Path where G-NAF will be downloaded to.  Default is \code{"./"}.}
 
 \item{recursive}{If file paths should allow to be recursively created. Default is \code{TRUE}.}
 
