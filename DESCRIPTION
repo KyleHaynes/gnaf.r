@@ -1,6 +1,6 @@
 Package: gnaf.r
 Title: Import the (Australian) Geocoded - National Address File (G-NAF) in to R.
-Version: 0.0.1.4
+Version: 0.0.1.5
 Authors@R: 
     person(given = "Kyle",
            family = "Haynes",

@@ -578,48 +578,11 @@ get_state <- function(setup = gnaf_setup_data){
 ################################################################################
 ################################################################################
 
-#' @name get_address_mesh_block_2011
+#' @name get_address_mesh_block
 
-#' @title Returns address_mesh_block_2011 information.
+#' @title Returns address_mesh_block data.
 
-#' @description Returns address_mesh_block_2011 information.
-
-
-#' @param setup A character vector identifying the setup object run by calling `setup()`.
-
-#' @return Returns ***UPDATE***
-
-
-#' @author Kyle Haynes, \email{kyle@@kylehaynes.com.au}.
-
-
-#' @examples
-#' # Update
-#' @export
-get_address_mesh_block_2011 <- function(setup = gnaf_setup_data){
-    
-    # Return the scheme from the setup object.
-    dt <- setup$schema
-
-    # Subset to relevant files.
-    paths <- dt[full_paths %ilike% "_ADDRESS_MESH_BLOCK_2011_psv"]$full_paths
-
-    # fread and bind together as a single data.table.
-    address_mesh_block_2011 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
-
-    # Return the object
-    return(address_mesh_block_2011[])
-}
-
-################################################################################
-################################################################################
-################################################################################
-
-#' @name get_address_mesh_block_2016
-
-#' @title Returns address_mesh_block_2016 information.
-
-#' @description Returns address_mesh_block_2016 information.
+#' @description Returns address_mesh_block data.
 
 
 #' @param setup A character vector identifying the setup object run by calling `setup()`.
@@ -633,20 +596,30 @@ get_address_mesh_block_2011 <- function(setup = gnaf_setup_data){
 #' @examples
 #' # Update
 #' @export
-get_address_mesh_block_2016 <- function(setup = gnaf_setup_data){
+get_address_mesh_block <- function(setup = gnaf_setup_data, years = c("2021", "2016", "2011")){
     
     # Return the scheme from the setup object.
     dt <- setup$schema
 
+    # Limit the function to currently just one set of meshblocks
+    if(!years %in% c("2021", "2016", "2011")) {
+        stop("years must be in 2021, 2016, 2011")
+    }
+
     # Subset to relevant files.
-    paths <- dt[full_paths %ilike% "_ADDRESS_MESH_BLOCK_2016_psv"]$full_paths
+
+    tmp <- paste0("_ADDRESS_MESH_BLOCK_(", paste(years, collapse = "|"), ")_psv")
+
+
+    paths <- dt[full_paths %ilike% tmp]$full_paths
 
     # fread and bind together as a single data.table.
-    address_mesh_block_2016 <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
+    address_mesh_block <- rbindlist(lapply(paths, fread, colClasses = "character", na.strings = ""))
 
     # Return the object
-    return(address_mesh_block_2016[])
+    return(address_mesh_block[])
 }
+
 
 ################################################################################
 ################################################################################
