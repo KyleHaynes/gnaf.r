@@ -62,18 +62,18 @@ setup <- function(dir, states = NA, verbose = TRUE){
 
     if(verbose){
         len_files <- length(files)
-        if(len_files == 170){
-            message("There are, ", len_files, "*.psv files in the defined directory. This appears the correct number of files.")
-        } else if (len_files < 170){
-            message("There are, ", len_files, "*.psv files in the defined directory. This is less than the expected number of 170 files.")
-        } else {
-            message("There are, ", len_files, "*.psv files in the defined directory. This exceeds the expected number of 170 files. This may be a user intentional issue")
-        }
+        # if(len_files == 170){
+        #     message("There are, ", len_files, "*.psv files in the defined directory. This appears the correct number of files.")
+        # } else if (len_files < 170){
+        #     message("There are, ", len_files, "*.psv files in the defined directory. This is less than the expected number of 170 files.")
+        # } else {
+        #     message("There are, ", len_files, "*.psv files in the defined directory. This exceeds the expected number of 170 files. This may be a user intentional issue")
+        # }
 
-        # Summary
+        # # Summary
         
-        message("\nFile type (N = 9 indicates all jurisdictions) counts:")
-        print(dt[, .N, .(file)])
+        # message("\nFile type (N = 9 indicates all jurisdictions) counts:")
+        # print(dt[, .N, .(file)])
 
         message("\nFiles per state (19 indicate all G-NAF related files):")
         print(dt[, .N, .(state)])

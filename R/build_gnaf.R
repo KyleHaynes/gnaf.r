@@ -20,9 +20,8 @@
 
 #' @param add_geo_coordinate A logical argument to add geographical coordinate latitude and longitude fields. Default is \code{TRUE}.
 
-#' @param add_meshblock_2011 A logical argument to Mesh Block 2011 fields. Default is \code{TRUE}.
-
-#' @param add_meshblock_2016 A logical argument to Mesh Block 2016 fields. Default is \code{TRUE}.
+#' @param add_meshblock_years A character string specifying which meshblock years to add. Default
+#' is \code{FALSE}. Depending on what version of G-NAF you have sourced \code{c("2021", "2016", "2011")}.
 
 #' @param add_locality_alias_variants A logical argument to include locality alias variants. Default is \code{FALSE}.
 
@@ -50,8 +49,7 @@ build_gnaf <- function(setup = gnaf_setup_data,
                        missing = "",
                        concatenate = TRUE,
                        add_geo_coordinate = TRUE,
-                       add_meshblock_2011 = TRUE,
-                       add_meshblock_2016 = TRUE,
+                       add_meshblock_years = NULL,
                        add_locality_alias_variants = FALSE,
                        add_alias_links = FALSE,
                        verbose = TRUE){
@@ -153,57 +151,36 @@ build_gnaf <- function(setup = gnaf_setup_data,
     }
 
     # ---- Mesh Block 2011 ----
-    if(add_meshblock_2011){
-        tmp <- get_address_mesh_block_2011()
-        if(drop_empty_vars){
-            tmp <-  tmp[, which(unlist(lapply(tmp, function(x) !all(is.na(x))))), with = FALSE]
-        }
-        if(drop_date_variables){
-            drop <- names(tmp)[grepl("^DATE", names(tmp))]
-            set(tmp, , drop, NULL)
-        }
-        if(simple){
-            drop <- c("ADDRESS_MESH_BLOCK_2011_PID", "MB_MATCH_CODE")
-            drop <- drop[drop %in% names(tmp)]
-            set(tmp, , drop, NULL)
-        }
-        # We can derive the Mesh Block Code from the `MB_2011_PID` variable.
-        tmp[, MB_2011_PID := gsub("^MB11", "", MB_2011_PID, perl = TRUE)]
-        setnames(tmp, "MB_2011_PID", "MB_2011_CODE")
+    if(!is.null(add_meshblock_years)){
+        tmp <- get_address_mesh_block(years = add_meshblock_years)
+        if(nrow(tmp) > 0){
+            if(drop_empty_vars){
+                tmp <-  tmp[, which(unlist(lapply(tmp, function(x) !all(is.na(x))))), with = FALSE]
+            }
+            if(drop_date_variables){
+                drop <- names(tmp)[grepl("^DATE", names(tmp))]
+                set(tmp, , drop, NULL)
+            }
+            if(simple){
+                drop <- c(paste0("ADDRESS_MESH_BLOCK_", add_meshblock_years,"_PID"), "MB_MATCH_CODE")
+                drop <- drop[drop %in% names(tmp)]
+                set(tmp, , drop, NULL)
+            }
+            # We can derive the Mesh Block Code from the `MB_YYY_PID` variable.
+            year <- paste0("MB_", add_meshblock_years, "_PID")
+            tmp[, (year) := gsub("^MB\\d\\d", "", get(year), perl = TRUE)]
+            setnames(tmp, paste0("MB_", add_meshblock_years, "_PID"), paste0("MB_", add_meshblock_years, "_CODE"))
 
-        # Merge.
-        dt <- merge(dt, tmp, by = "ADDRESS_DETAIL_PID", all.x = TRUE, suffixes = c("", "_locality"))
-        # Append new variables.
-        vars <- c(vars,  list(locality = setdiff(names(dt), unlist(vars, use.names = FALSE))))
+            # Merge.
+            dt <- merge(dt, tmp, by = "ADDRESS_DETAIL_PID", all.x = TRUE, suffixes = c("", "_locality"))
+            # Append new variables.
+            vars <- c(vars,  list(locality = setdiff(names(dt), unlist(vars, use.names = FALSE))))
+        } else {
+            warnings("No meshblock data loaded. Please inspect what meshblocks years are actually available.")
+        }
     }
 
-    # ---- Mesh Block 2016 ----
-    if(add_meshblock_2016){
-        tmp <- get_address_mesh_block_2016()
-        if(drop_empty_vars){
-            tmp <-  tmp[, which(unlist(lapply(tmp, function(x) !all(is.na(x))))), with = FALSE]
-        }
-        if(drop_date_variables){
-            drop <- names(tmp)[grepl("^DATE", names(tmp))]
-            set(tmp, , drop, NULL)
-        }
-        if(simple){
-            drop <- c("ADDRESS_MESH_BLOCK_2016_PID", "MB_MATCH_CODE")
-            drop <- drop[drop %in% names(tmp)]
-            set(tmp, , drop, NULL)
-        }
-        # We can derive the Mesh Block Code from the `MB_2016_PID` variable.
-        tmp[, MB_2016_PID := gsub("^MB16", "", MB_2016_PID, perl = TRUE)]
-        setnames(tmp, "MB_2016_PID", "MB_2016_CODE")
-
-        # Merge.
-        dt <- merge(dt, tmp, by = "ADDRESS_DETAIL_PID", all.x = TRUE, suffixes = c("", "_locality"))
-        # Append new variables.
-        vars <- c(vars,  list(locality = setdiff(names(dt), unlist(vars, use.names = FALSE))))
-    }
-
-
-    # ---- Authority code replacement ----
+     # ---- Authority code replacement ----
     if("STREET_SUFFIX_CODE" %in% names(dt)){
         dt$STREET_SUFFIX <- setup$ac_md$STREET_SUFFIX$NAME[match(dt$STREET_SUFFIX_CODE, setup$ac_md$STREET_SUFFIX$CODE)]
         set(dt, , "STREET_SUFFIX_CODE", NULL)

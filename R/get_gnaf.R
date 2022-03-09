@@ -5,9 +5,11 @@
 #' @description Convenience function for downloading and unpacking G-NAF
 
 
-#' @param url A character vector identifying the root directory of where the G-NAF extract is located.
+#' @param url A character vector identifying the root directory of where the G-NAF extract is
+#' located. Note that it will always download the most recent gnaf, despite the default URL
+#' indicating Nov 2020
 
-#' @param dest_folder A regular expression of which Australian State jurisdictions to import.  Default is \code{"./"}.
+#' @param dest_folder Path where G-NAF will be downloaded to.  Default is \code{"./"}.
 
 #' @param recursive If file paths should allow to be recursively created. Default is \code{TRUE}.
 
@@ -68,13 +70,13 @@ get_gnaf <- function(url = "https://data.gov.au/data/dataset/19432f89-dc3a-4ef3-
     if(verbose){
         if(nrow(d) == 1){
             message("You can now call the `setup()` to begin the initial setup of G-NAF. Be sure to toggle the `states` argument to only import relevant jurisdictions.\n")
-            message("Example setup call: setup(dir = \"", d$full_paths, "\", states = \"tas|act\")")
+            message("Example setup call: setup(dir = \"", d$full_paths, "\", states = \"qld\")")
         } else {
             message("Multiple extracts identified:\n")
             print(d)
             message("\nIf you want to setup the latest extract:")
-            latest <- gsub("\\", "\\\\", d$full_paths[nrow(d)])
-            message("\nExample setup call: setup(dir = \"", latest, "\", states = \"tas|act\")")
+            # latest <- gsub("\\", "\\\\", d$full_paths[nrow(d)])
+            message("\nExample setup call: setup(dir = \"", d$full_paths[nrow(d)], "\", states = \"qld\")")
         }
     } else {
         message("Latest extract located: ", d$full_paths[nrow(d)])
